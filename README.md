@@ -6,20 +6,58 @@ Chatbot public qui répond à des questions sur Adrien Casse — Data Scientist 
 
 ---
 
-## Comment ça marche
+## Architecture RAG
 
 ```
-Question de l'utilisateur
-        ↓
-Embedding de la question (fastembed — BAAI/bge-small-en-v1.5, ONNX)
-        ↓
-Recherche cosine similarity sur 57 chunks de la base de connaissance
-        ↓
-Top-4 chunks injectés dans le system prompt
-        ↓
-Llama 3.3 70B via Groq génère la réponse en 3ème personne
-        ↓
-Interface de chat Next.js
+╔══════════════════════════════════════════════════════════════╗
+║                   BUILD TIME  (image Docker)                 ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║   knowledge/*.md  ──►  embed.py                             ║
+║   (7 fichiers)         │                                    ║
+║                        ├─ découpe en chunks ~400 chars      ║
+║                        ├─ fastembed  →  vecteurs 384 dims   ║
+║                        ├─ embeddings.npy   (57 × 384)       ║
+║                        └─ chunks.json      (57 passages)    ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+                           ↓ figé dans l'image ↓
+╔══════════════════════════════════════════════════════════════╗
+║                   RUNTIME  (Railway / FastAPI)               ║
+╠══════════════════════════════════════════════════════════════╣
+║                                                              ║
+║  [1] Question utilisateur                                    ║
+║      "Pourquoi Adrien cherche un nouveau poste ?"            ║
+║                        │                                    ║
+║                        ▼                                    ║
+║  [2] Embedding question                                      ║
+║      fastembed  →  [ 0.12, -0.34, 0.89, … ]  (384 dims)    ║
+║                        │                                    ║
+║                        ▼                                    ║
+║  [3] Recherche sémantique                                    ║
+║      cosine similarity  vs  embeddings.npy                  ║
+║      → score pour chacun des 57 chunks                      ║
+║      → top-4 passages les plus proches                      ║
+║                        │                                    ║
+║                        ▼                                    ║
+║  [4] Injection dans le prompt                                ║
+║      system prompt = persona Adrien                         ║
+║                    + règles (3ème personne, anti-répétition) ║
+║                    + [chunk faq.md] [chunk parcours.md] …   ║
+║                        │                                    ║
+║                        ▼                                    ║
+║  [5] Groq API  →  Llama 3.3 70B  (70 milliards paramètres) ║
+║      température 0.7 · max 600 tokens · ~300ms              ║
+║                        │                                    ║
+║                        ▼                                    ║
+║  [6] Réponse  →  Next.js  →  Utilisateur                    ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+
+  Pourquoi le RAG ?  Le modèle ne "connaît" pas Adrien par défaut.
+  À chaque question, les passages pertinents sont injectés dans le
+  prompt — le LLM répond uniquement à partir de ces extraits.
+  Résultat : réponses précises, ancrées dans des faits réels.
 ```
 
 ---
