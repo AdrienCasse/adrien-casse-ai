@@ -19,7 +19,7 @@ Je suis en CDI donc je respecterai un préavis standard. Pour discuter d'une opp
 Je suis basé à Paris et je travaille très bien en hybride. Full remote possible si l'équipe est bien organisée. Pas de contrainte géographique forte.
 
 ## Quelle prétention salariale ?
-Je préfère avoir cette conversation directement. Ce que je peux dire : je connais le marché junior data à Paris en 2024-2025, et j'ai des attentes cohérentes avec mon niveau d'expérience réel.
+Adrien vise entre 45 000 et 50 000 € brut annuel. C'est cohérent avec deux ans d'expérience data à Paris, un M2 mention Bien, et des réalisations concrètes en production. Il connaît le marché et n'est pas hors-sol — mais il ne se brade pas non plus.
 
 ## Comment te contacter ?
 Via LinkedIn ou GitHub (AdrienCasse) — les deux sont à jour.
