@@ -244,10 +244,11 @@ export default function Home() {
             <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '1px', color: 'rgba(148,163,184,0.5)', textTransform: 'uppercase', marginBottom: 10 }}>Univers</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {[
-                { icon: '🏔️', label: 'Guide randonnée · Maurice' },
+                { icon: '⚽', label: 'Manchester United · Premier League' },
+                { icon: '🎌', label: 'Japon · Jujutsu Kaisen' },
                 { icon: '🎭', label: 'Comédie musicale française' },
-                { icon: '🎶', label: 'Variété / Jazz / Nostalgie' },
-                { icon: '🎬', label: 'Cinéma · Paris' },
+                { icon: '🏋️', label: 'Sport · Athlétisme' },
+                { icon: '🏔️', label: 'Randonnée · Maurice' },
               ].map(({ icon, label }) => (
                 <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: 'rgba(148,163,184,0.65)' }}>
                   <span style={{ fontSize: 14 }}>{icon}</span> {label}
