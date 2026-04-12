@@ -1,5 +1,7 @@
 # Mes projets
 
+Ces quatre projets sont la liste exhaustive de mes projets personnels documentés. Ne pas en mentionner d'autres qui n'y figurent pas.
+
 ## Régression hédonique sur les prix immobiliers à Lyon
 Projet personnel sur les données DVF (Demandes de Valeurs Foncières) — 47 000 transactions réelles.
 J'ai construit un modèle OLS de régression hédonique pour expliquer et prédire les prix au m² à Lyon selon les caractéristiques du bien. R² = 0.72 sur les données de test.
@@ -16,7 +18,7 @@ Ce projet illustre bien ma façon de travailler : quand j'ai un problème répé
 
 ## Ce chatbot — adrien-casse-ai
 Un pipeline RAG complet pour créer un chatbot qui me représente.
-Embedding avec sentence-transformers, recherche vectorielle FAISS, inférence via Llama 3.1 70B (Groq), déployé publiquement.
+Embedding avec fastembed (BAAI/bge-small-en-v1.5, ONNX), recherche vectorielle NumPy cosine similarity, inférence via Llama 3.3 70B (Groq), déployé publiquement sur Railway + Vercel.
 Ce que j'ai voulu montrer : je sais construire un système LLM de bout en bout, pas juste appeler une API.
 
 ## GitHub

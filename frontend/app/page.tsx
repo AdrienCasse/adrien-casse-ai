@@ -277,7 +277,7 @@ export default function Home() {
           <div className="profile-desktop-only" style={{ marginBottom: 24 }}>
             <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '1px', color: 'rgba(148,163,184,0.5)', textTransform: 'uppercase', marginBottom: 10 }}>Stack</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
-              {['Python', 'SQL', 'GCP', 'BigQuery', 'FastAPI', 'XGBoost', 'R'].map(s => (
+              {['Python', 'SQL', 'GCP', 'BigQuery', 'FastAPI', 'R', 'Next.js'].map(s => (
                 <span key={s} style={{
                   fontSize: 10, padding: '3px 8px', borderRadius: 6,
                   background: 'rgba(56,189,248,0.07)', border: '1px solid rgba(56,189,248,0.15)',
@@ -294,7 +294,7 @@ export default function Home() {
               {[
                 { icon: '⚽', label: 'Manchester United · Premier League' },
                 { icon: '🎌', label: 'Japon · Jujutsu Kaisen' },
-                { icon: '🎭', label: 'Comédie musicale française' },
+                { icon: '🎭', label: 'Comédie musicale' },
                 { icon: '🏋️', label: 'Sport · Athlétisme' },
                 { icon: '🏔️', label: 'Randonnée · Maurice' },
               ].map(({ icon, label }) => (
