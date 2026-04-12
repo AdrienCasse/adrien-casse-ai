@@ -107,7 +107,7 @@ export default function Home() {
                 Adrien Casse
               </div>
               <div style={{ fontSize: 12, color: 'rgba(148,163,184,0.8)', marginTop: 2 }}>
-                Data Analyst · C-Ways · Paris — Répond comme si c'était lui
+                Data Scientist · Paris — Pose-lui une question
               </div>
             </div>
             <div style={{ marginLeft: 'auto', display: 'flex', gap: 6 }}>

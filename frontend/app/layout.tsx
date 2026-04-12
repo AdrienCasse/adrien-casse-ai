@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Adrien Casse — Data Analyst · Paris',
-  description: 'Parle directement à Adrien Casse — Data Analyst Junior, M2 Économétrie Lyon 2, GCP en production. Propulsé par un pipeline RAG maison.',
+  description: 'Parle directement à Adrien Casse — Data Scientist, M2 Économétrie Lyon 2, GCP en production. Propulsé par un pipeline RAG maison.',
   openGraph: {
     title: 'Adrien Casse AI',
     description: 'Pose tes questions à un chatbot qui connaît vraiment Adrien.',
