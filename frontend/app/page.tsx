@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Send, Loader2, Github, MapPin, GraduationCap, Briefcase, RotateCcw, ExternalLink } from 'lucide-react'
+import { Send, Loader2, Github, MapPin, GraduationCap, Briefcase, RotateCcw, Linkedin, Check } from 'lucide-react'
 
 const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8002'
 
@@ -34,8 +34,29 @@ export default function Home() {
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [showProfile, setShowProfile] = useState(true)
+  const [toast, setToast] = useState(false)
+  const [typedQuote, setTypedQuote] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+
+  const QUOTE = "Un bon modèle qui tourne, c'est mieux qu'un beau modèle qui dort."
+
+  useEffect(() => {
+    let i = 0
+    const timer = setInterval(() => {
+      setTypedQuote(QUOTE.slice(0, i + 1))
+      i++
+      if (i >= QUOTE.length) clearInterval(timer)
+    }, 28)
+    return () => clearInterval(timer)
+  }, [])
+
+  function handleShare() {
+    navigator.clipboard.writeText('https://adrien-casse-rag.vercel.app').then(() => {
+      setToast(true)
+      setTimeout(() => setToast(false), 2200)
+    })
+  }
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -98,10 +119,31 @@ export default function Home() {
           100% { background-position:  200% center; }
         }
         .fade-up { animation: fadeUp 0.4s ease both; }
-        .suggestion-btn:hover { background: rgba(56,189,248,0.1) !important; border-color: rgba(56,189,248,0.3) !important; transform: translateY(-1px); }
-        .suggestion-btn { transition: all 0.2s ease !important; }
-        .send-btn:hover:not(:disabled) { transform: scale(1.05); box-shadow: 0 4px 20px rgba(56,189,248,0.4) !important; }
+        .suggestion-btn:hover { background: rgba(56,189,248,0.12) !important; border-color: rgba(56,189,248,0.4) !important; transform: translateY(-2px); box-shadow: 0 4px 16px rgba(56,189,248,0.08) !important; }
+        .suggestion-btn:active { transform: translateY(0) !important; }
+        .suggestion-btn { transition: all 0.18s ease !important; }
+        .send-btn:hover:not(:disabled) { transform: scale(1.06); box-shadow: 0 4px 20px rgba(56,189,248,0.4) !important; }
         .send-btn { transition: all 0.15s ease !important; }
+        .profile-link:hover { opacity: 1 !important; transform: translateY(-1px); }
+        .profile-link { transition: all 0.18s ease !important; }
+        @keyframes rotateBorder {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes pulseGlow {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.4); }
+          50%       { box-shadow: 0 0 0 5px rgba(34,197,94,0); }
+        }
+        @keyframes toastIn {
+          from { opacity: 0; transform: translateY(8px) scale(0.96); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes cursor {
+          0%, 100% { opacity: 1; } 50% { opacity: 0; }
+        }
+        .status-dot { animation: pulseGlow 2s ease-in-out infinite; }
+        .cursor { display: inline-block; animation: cursor 0.9s ease-in-out infinite; margin-left: 1px; }
         @media (max-width: 768px) {
           .layout { flex-direction: column !important; }
           .profile-panel {
@@ -185,13 +227,19 @@ export default function Home() {
           {/* Avatar */}
           <div className="profile-avatar-section" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
             <div style={{
-              width: 72, height: 72, borderRadius: 20,
-              background: 'linear-gradient(135deg, #0f4c8a, #38bdf8)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 24, fontWeight: 800, color: 'white', letterSpacing: '-1px',
-              boxShadow: '0 8px 32px rgba(56,189,248,0.25), 0 0 0 1px rgba(56,189,248,0.15)',
-              marginBottom: 14,
-            }}>AC</div>
+              width: 76, height: 76, borderRadius: 22, padding: 2,
+              background: 'linear-gradient(135deg, #38bdf8, #0f4c8a, #a78bfa, #38bdf8)',
+              backgroundSize: '300% 300%',
+              animation: 'rotateBorder 4s ease infinite',
+              marginBottom: 14, flexShrink: 0,
+            }}>
+              <div style={{
+                width: '100%', height: '100%', borderRadius: 20,
+                background: 'linear-gradient(135deg, #0f4c8a, #1e3a6e)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 24, fontWeight: 800, color: 'white', letterSpacing: '-1px',
+              }}>AC</div>
+            </div>
             <div style={{ fontSize: 18, fontWeight: 700, color: 'white', letterSpacing: '-0.3px', textAlign: 'center' }}>
               Adrien Casse
             </div>
@@ -200,7 +248,7 @@ export default function Home() {
               textTransform: 'uppercase', color: '#38bdf8',
             }}>Data Scientist</div>
             <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 6px #22c55e' }} />
+              <div className="status-dot" style={{ width: 7, height: 7, borderRadius: '50%', background: '#22c55e' }} />
               <span style={{ fontSize: 10, color: 'rgba(148,163,184,0.6)' }}>Disponible à l'écoute</span>
             </div>
           </div>
@@ -259,24 +307,34 @@ export default function Home() {
 
           {/* Links */}
           <div className="profile-desktop-only" style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid rgba(56,189,248,0.1)', display: 'flex', gap: 8 }}>
-            <a href="https://github.com/AdrienCasse" target="_blank" rel="noreferrer"
+            <a href="https://github.com/AdrienCasse" target="_blank" rel="noreferrer" className="profile-link"
               style={{
                 flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                 padding: '8px', borderRadius: 8, background: 'rgba(255,255,255,0.04)',
                 border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(148,163,184,0.7)',
-                textDecoration: 'none', fontSize: 11, transition: 'all 0.2s',
+                textDecoration: 'none', fontSize: 11, opacity: 0.85,
               }}>
               <Github size={13} /> GitHub
             </a>
-            <a href="https://adrien-casse-rag.vercel.app" target="_blank" rel="noreferrer"
+            <a href="https://www.linkedin.com/in/adrien-casse" target="_blank" rel="noreferrer" className="profile-link"
               style={{
                 flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                padding: '8px', borderRadius: 8, background: 'rgba(56,189,248,0.07)',
-                border: '1px solid rgba(56,189,248,0.2)', color: '#38bdf8',
-                textDecoration: 'none', fontSize: 11, transition: 'all 0.2s',
+                padding: '8px', borderRadius: 8, background: 'rgba(10,102,194,0.12)',
+                border: '1px solid rgba(10,102,194,0.3)', color: '#60a5fa',
+                textDecoration: 'none', fontSize: 11, opacity: 0.85,
               }}>
-              <ExternalLink size={13} /> Partager
+              <Linkedin size={13} /> LinkedIn
             </a>
+            <button onClick={handleShare} className="profile-link"
+              style={{
+                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                padding: '8px', borderRadius: 8, background: toast ? 'rgba(34,197,94,0.1)' : 'rgba(56,189,248,0.07)',
+                border: toast ? '1px solid rgba(34,197,94,0.3)' : '1px solid rgba(56,189,248,0.2)',
+                color: toast ? '#22c55e' : '#38bdf8', fontSize: 11, cursor: 'pointer', opacity: 0.85,
+                transition: 'all 0.2s',
+              }}>
+              {toast ? <><Check size={13} /> Copié !</> : 'Partager'}
+            </button>
           </div>
 
           {/* Powered by */}
@@ -342,9 +400,9 @@ export default function Home() {
                   <div style={{
                     fontSize: 13, color: 'rgba(148,163,184,0.6)', lineHeight: 1.8,
                     borderLeft: '2px solid rgba(56,189,248,0.3)',
-                    paddingLeft: 14, textAlign: 'left', fontStyle: 'italic',
+                    paddingLeft: 14, textAlign: 'left', fontStyle: 'italic', minHeight: '2.6em',
                   }}>
-                    "Un bon modèle qui tourne, c'est mieux qu'un beau modèle qui dort."
+                    "{typedQuote}<span className="cursor" style={{ color: '#38bdf8', fontStyle: 'normal' }}>|</span>"
                   </div>
                   <div style={{ fontSize: 11, color: 'rgba(100,116,139,0.5)', marginTop: 8, textAlign: 'right' }}>— Adrien Casse</div>
                 </div>
