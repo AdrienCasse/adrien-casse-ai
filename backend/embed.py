@@ -1,5 +1,6 @@
 """
 embed.py — Construit l'index d'embeddings à partir des fichiers markdown de /knowledge.
+Utilise fastembed (ONNX) au lieu de sentence-transformers (PyTorch) — 10x plus léger.
 
 Usage : python3 embed.py
 Produit : embeddings.npy + chunks.json dans /backend/data/
@@ -10,7 +11,7 @@ import re
 from pathlib import Path
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
+from fastembed import TextEmbedding
 
 KNOWLEDGE_DIR = Path(__file__).parent.parent / "knowledge"
 DATA_DIR = Path(__file__).parent / "data"
@@ -18,6 +19,7 @@ DATA_DIR.mkdir(exist_ok=True)
 
 CHUNK_SIZE = 400
 CHUNK_OVERLAP = 80
+MODEL_NAME = "BAAI/bge-small-en-v1.5"  # 33MB, multilingue, très bon pour FR+EN
 
 
 def load_markdown_files() -> list[dict]:
@@ -60,22 +62,25 @@ def build_index():
 
     print(f"\nTotal : {len(all_chunks)} chunks à encoder")
 
-    print("Chargement du modèle d'embedding...")
-    model = SentenceTransformer("all-MiniLM-L6-v2")
+    print(f"Chargement du modèle fastembed ({MODEL_NAME})...")
+    model = TextEmbedding(MODEL_NAME)
 
     print("Encoding...")
     texts = [c["text"] for c in all_chunks]
-    embeddings = model.encode(texts, show_progress_bar=True, normalize_embeddings=True)
-    embeddings = np.array(embeddings, dtype="float32")
+    embeddings_gen = model.embed(texts)
+    embeddings = np.array(list(embeddings_gen), dtype="float32")
 
-    # Sauvegarde numpy (pas besoin de FAISS pour 44 chunks)
+    # Normaliser pour cosine similarity via dot product
+    norms = np.linalg.norm(embeddings, axis=1, keepdims=True)
+    embeddings = embeddings / np.maximum(norms, 1e-10)
+
     np.save(str(DATA_DIR / "embeddings.npy"), embeddings)
     with open(DATA_DIR / "chunks.json", "w", encoding="utf-8") as f:
         json.dump(all_chunks, f, ensure_ascii=False, indent=2)
 
-    print(f"\nEmbeddings sauvegardés : {DATA_DIR}/embeddings.npy")
-    print(f"Chunks sauvegardés : {DATA_DIR}/chunks.json")
-    print(f"Done — {len(all_chunks)} chunks indexés, shape {embeddings.shape}")
+    print(f"\nDone — {len(all_chunks)} chunks indexés, shape {embeddings.shape}")
+    print(f"Embeddings : {DATA_DIR}/embeddings.npy")
+    print(f"Chunks     : {DATA_DIR}/chunks.json")
 
 
 if __name__ == "__main__":

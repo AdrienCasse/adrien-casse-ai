@@ -21,7 +21,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from groq import Groq
 from pydantic import BaseModel
-from sentence_transformers import SentenceTransformer
+from fastembed import TextEmbedding
 
 load_dotenv()
 
@@ -75,8 +75,8 @@ def _log_question(session_id: str, question: str, answer: str,
 
 # ─── Chargement des ressources (une seule fois au démarrage) ──────────────────
 
-print("Chargement du modèle d'embedding...")
-_model = SentenceTransformer("all-MiniLM-L6-v2")
+print("Chargement du modèle fastembed...")
+_model = TextEmbedding("BAAI/bge-small-en-v1.5")
 
 print("Chargement des embeddings...")
 _embeddings = np.load(str(DATA_DIR / "embeddings.npy"))  # shape (N, 384)
@@ -142,8 +142,8 @@ async def chat(body: ChatRequest, request: Request):
     session_id = hashlib.sha256(client_ip.encode()).hexdigest()[:16]
 
     # 1. Embed la question
-    q_embedding = _model.encode([body.message], normalize_embeddings=True)
-    q_embedding = np.array(q_embedding, dtype="float32").flatten()
+    q_embedding = np.array(list(_model.embed([body.message])), dtype="float32").flatten()
+    q_embedding = q_embedding / max(np.linalg.norm(q_embedding), 1e-10)
 
     # 2. Recherche par similarité cosine (embeddings normalisés → dot product = cosine)
     scores = (_embeddings @ q_embedding)  # shape (N,)
