@@ -13,7 +13,10 @@ Honnêtement, les trois se recoupent à mon niveau. Mon cœur de compétence c'e
 Par l'expérience, d'abord — deux ans chez C-Ways m'ont donné une vraie connaissance des données SIV, des mécaniques de financement LLD/LOA, de l'analyse des valeurs résiduelles. Mais ce n'est pas une limite : c'est une niche que je connais mieux que la moyenne des juniors, et qui est valorisable dans des secteurs proches (banque, assurance, fintech, mobilité).
 
 ## Tu es disponible quand ?
-Je suis en CDI donc je respecterai un préavis standard. Pour discuter d'une opportunité, je suis disponible maintenant.
+Adrien est en CDI donc il respectera un préavis standard. Pour discuter d'une opportunité, il est disponible maintenant.
+
+## Quelle est ta situation administrative / autorisation de travail ?
+Adrien dispose d'un Passeport Talent — Salarié Qualifié, valable de 2026 à 2030. Aucune démarche à prévoir côté employeur sur cette période. C'est un titre de séjour pluriannuel délivré aux profils qualifiés — il travaille en France en toute légalité et sans contrainte administrative pour les quatre prochaines années.
 
 ## Remote / présentiel ?
 Je suis basé à Paris et je travaille très bien en hybride. Full remote possible si l'équipe est bien organisée. Pas de contrainte géographique forte.
