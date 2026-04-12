@@ -104,8 +104,29 @@ export default function Home() {
         .send-btn { transition: all 0.15s ease !important; }
         @media (max-width: 768px) {
           .layout { flex-direction: column !important; }
-          .profile-panel { width: 100% !important; min-height: auto !important; border-right: none !important; border-bottom: 1px solid rgba(56,189,248,0.1) !important; padding: 16px !important; }
-          .chat-panel { height: calc(100dvh - 120px) !important; }
+          .profile-panel {
+            width: 100% !important;
+            min-height: auto !important;
+            border-right: none !important;
+            border-bottom: 1px solid rgba(56,189,248,0.1) !important;
+            padding: 12px 16px !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            gap: 10px !important;
+            overflow: visible !important;
+          }
+          .profile-panel-hidden { display: none !important; }
+          .profile-desktop-only { display: none !important; }
+          .chat-panel { height: 100dvh !important; }
+          .suggestions-grid { grid-template-columns: 1fr !important; }
+          .mobile-profile-toggle { display: flex !important; }
+          .messages-area { padding: 16px 16px 8px !important; }
+          .input-area { padding: 8px 12px max(12px, env(safe-area-inset-bottom)) !important; }
+        }
+        @media (min-width: 769px) {
+          .mobile-profile-toggle { display: none !important; }
+          .profile-panel-hidden { display: flex !important; }
         }
       `}</style>
 
@@ -131,7 +152,7 @@ export default function Home() {
       <div className="layout" style={{ display: 'flex', height: '100dvh', position: 'relative', zIndex: 1 }}>
 
         {/* ── Profile Panel ── */}
-        <div className="profile-panel" style={{
+        <div className={`profile-panel${!showProfile ? ' profile-panel-hidden' : ''}`} style={{
           width: 280, flexShrink: 0,
           background: 'linear-gradient(180deg, rgba(14,30,64,0.95) 0%, rgba(6,13,31,0.98) 100%)',
           borderRight: '1px solid rgba(56,189,248,0.1)',
@@ -189,7 +210,7 @@ export default function Home() {
           </div>
 
           {/* Stack pills */}
-          <div style={{ marginBottom: 24 }}>
+          <div className="profile-desktop-only" style={{ marginBottom: 24 }}>
             <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '1px', color: 'rgba(148,163,184,0.5)', textTransform: 'uppercase', marginBottom: 10 }}>Stack</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
               {['Python', 'SQL', 'GCP', 'BigQuery', 'FastAPI', 'XGBoost', 'R'].map(s => (
@@ -203,7 +224,7 @@ export default function Home() {
           </div>
 
           {/* Passions */}
-          <div style={{ marginBottom: 'auto' }}>
+          <div className="profile-desktop-only" style={{ marginBottom: 'auto' }}>
             <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: '1px', color: 'rgba(148,163,184,0.5)', textTransform: 'uppercase', marginBottom: 10 }}>Univers</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {[
@@ -220,7 +241,7 @@ export default function Home() {
           </div>
 
           {/* Links */}
-          <div style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid rgba(56,189,248,0.1)', display: 'flex', gap: 8 }}>
+          <div className="profile-desktop-only" style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid rgba(56,189,248,0.1)', display: 'flex', gap: 8 }}>
             <a href="https://github.com/AdrienCasse" target="_blank" rel="noreferrer"
               style={{
                 flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
@@ -242,8 +263,8 @@ export default function Home() {
           </div>
 
           {/* Powered by */}
-          <div style={{ marginTop: 14, textAlign: 'center', fontSize: 9, color: 'rgba(100,116,139,0.5)', fontFamily: 'JetBrains Mono, monospace' }}>
-            RAG · fastembed · FAISS-numpy · Llama 3.3 70B
+          <div className="profile-desktop-only" style={{ marginTop: 14, textAlign: 'center', fontSize: 9, color: 'rgba(100,116,139,0.5)', fontFamily: 'JetBrains Mono, monospace' }}>
+            RAG · fastembed · NumPy cosine · Llama 3.3 70B
           </div>
         </div>
 
@@ -268,21 +289,32 @@ export default function Home() {
                 Répond en 3ème personne · connaît vraiment Adrien
               </div>
             </div>
-            {history.length > 0 && (
-              <button onClick={() => setHistory([])}
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <button className="mobile-profile-toggle"
+                onClick={() => setShowProfile(v => !v)}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: 6, background: 'transparent',
+                  display: 'none', alignItems: 'center', gap: 5, background: 'transparent',
                   border: '1px solid rgba(56,189,248,0.15)', borderRadius: 8,
-                  padding: '6px 12px', fontSize: 11, color: 'rgba(148,163,184,0.6)', cursor: 'pointer',
-                  transition: 'all 0.15s',
+                  padding: '6px 10px', fontSize: 11, color: '#38bdf8', cursor: 'pointer',
                 }}>
-                <RotateCcw size={11} /> Nouvelle conversation
+                AC ↕
               </button>
-            )}
+              {history.length > 0 && (
+                <button onClick={() => { setHistory([]); setShowProfile(true) }}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 6, background: 'transparent',
+                    border: '1px solid rgba(56,189,248,0.15)', borderRadius: 8,
+                    padding: '6px 12px', fontSize: 11, color: 'rgba(148,163,184,0.6)', cursor: 'pointer',
+                    transition: 'all 0.15s',
+                  }}>
+                  <RotateCcw size={11} /> Nouvelle conversation
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Messages */}
-          <div style={{ flex: 1, overflowY: 'auto', padding: '24px 28px 12px' }}>
+          <div className="messages-area" style={{ flex: 1, overflowY: 'auto', padding: '24px 28px 12px' }}>
 
             {empty && (
               <div className="fade-up" style={{
@@ -304,7 +336,7 @@ export default function Home() {
                   <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '1px', color: 'rgba(100,116,139,0.5)', textTransform: 'uppercase', marginBottom: 12, textAlign: 'center' }}>
                     Questions suggérées
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                  <div className="suggestions-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                     {SUGGESTIONS.map((s, i) => (
                       <button key={s.text} className="suggestion-btn"
                         onClick={() => send(s.text)}
@@ -392,7 +424,7 @@ export default function Home() {
           </div>
 
           {/* Input */}
-          <div style={{ padding: '12px 28px 20px', flexShrink: 0 }}>
+          <div className="input-area" style={{ padding: '12px 28px 20px', flexShrink: 0 }}>
             <div style={{
               display: 'flex', gap: 10, alignItems: 'flex-end',
               background: 'rgba(14,30,64,0.8)', backdropFilter: 'blur(20px)',
@@ -433,7 +465,7 @@ export default function Home() {
               </button>
             </div>
             <div style={{ textAlign: 'center', fontSize: 9, color: 'rgba(100,116,139,0.35)', marginTop: 8, fontFamily: 'JetBrains Mono, monospace' }}>
-              Llama 3.3 70B · Groq · RAG pipeline · adrien-casse-rag.vercel.app
+              Llama 3.3 70B · Groq · fastembed · NumPy cosine
             </div>
           </div>
         </div>
