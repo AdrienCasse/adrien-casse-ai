@@ -327,7 +327,7 @@ export default function Home() {
                     borderLeft: '2px solid rgba(56,189,248,0.3)',
                     paddingLeft: 14, textAlign: 'left', fontStyle: 'italic',
                   }}>
-                    "De Pointe aux Sables à Paris — j'ai quitté l'île à 17 ans avec un bac S et l'envie de construire des choses qui servent vraiment."
+                    "Un bon modèle qui tourne, c'est mieux qu'un beau modèle qui dort."
                   </div>
                   <div style={{ fontSize: 11, color: 'rgba(100,116,139,0.5)', marginTop: 8, textAlign: 'right' }}>— Adrien Casse</div>
                 </div>
