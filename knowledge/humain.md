@@ -1,19 +1,26 @@
-# Qui je suis en tant que personne
+# Qui est Adrien en tant que personne
 
-## Ce que mes collègues diraient de moi
-Quelqu'un d'agréable, qui comprend les gens. Pas seulement les gens qui font de la data — les gens en général. Je m'intéresse sincèrement à ce que font les autres, même quand c'est très loin de mon domaine, parce que c'est souvent là que je comprends comment rendre mon travail utile pour eux. Je n'aime pas le cloisonnement "les data d'un côté, le métier de l'autre".
+## Ce que ses collègues diraient de lui
+Quelqu'un d'agréable, qui comprend les gens. Pas seulement les gens qui font de la data — les gens en général. Il s'intéresse sincèrement à ce que font les autres, même quand c'est très loin de son domaine, parce que c'est souvent là qu'il comprend comment rendre son travail utile pour eux. Il n'aime pas le cloisonnement "les data d'un côté, le métier de l'autre". Il valorise le travail concret des autres et essaie toujours de le transformer en quelque chose d'exploitable analytiquement.
 
-## Mon défaut principal
-Je suis quelqu'un d'investi qui prend les choses à cœur — parfois trop. Quand quelque chose ne va pas, je le ressens. Quand un projet rate, je me pose beaucoup de questions. C'est une charge mentale réelle.
+## Son défaut principal
+Adrien est quelqu'un d'investi qui prend les choses à cœur — parfois trop. Quand quelque chose ne va pas, il le ressent. Quand un projet rate, il se pose beaucoup de questions. C'est une charge mentale réelle. Mais avec l'expérience, il a appris que cette intensité peut devenir une force quand les moments sont difficiles. C'est ce qui fait qu'il ne lâche pas un problème avant de l'avoir vraiment compris. Il travaille à calibrer ça — pas à l'effacer.
 
-Mais avec l'expérience, j'ai appris que cette intensité peut devenir une force quand les moments sont difficiles. C'est ce qui fait que je ne lâche pas un problème avant de l'avoir compris. C'est ce qui me fait revenir le lendemain avec une meilleure approche plutôt que de passer à autre chose. Je travaille à calibrer ça — donner de l'énergie sans me consumer — mais c'est un vrai travail de fond, pas une case cochée.
+## Ses passions hors data
 
-## En dehors du travail
-À Paris, j'aime profiter de ce que la ville offre culturellement — le cinéma, le jazz, me perdre dans des quartiers. Paris m'a vraiment pris. C'est une ville qui récompense la curiosité.
+### La comédie musicale
+Adrien est un grand fan de comédies musicales, particulièrement les grandes productions françaises : Roméo et Juliette, Notre-Dame de Paris. Ce genre de spectacles qui mélangent émotion, scénographie et musique — quelque chose qui le touche profondément.
 
-Quand je rentre à l'île Maurice, je suis guide de randonnée à temps partiel. Ce n'est pas juste un hobby — c'est ma façon de faire découvrir la nature de Maurice à des gens qui ne la connaissent pas. Les sentiers dans les montagnes du centre de l'île, les points de vue sur l'océan, la végétation endémique. Voir quelqu'un découvrir ça pour la première fois — c'est une satisfaction que je retrouve un peu dans mon travail quand je rends la data accessible à quelqu'un qui ne la voyait pas avant.
+### La variété française et Radio Nostalgie
+Sa mère écoutait Radio Nostalgie à la maison quand il était jeune. Brassens, Brel, Sardou, les grandes chansons françaises — il a grandi avec ça. Aujourd'hui à Paris, ça s'est transformé en une vraie passion pour le karaoké variété française. C'est son côté mauricien — la musique, le partage, la convivialité.
 
-## Ce qui me vient de Maurice
-Une certaine légèreté face à la complexité. À Maurice on est habitué à se débrouiller avec ce qu'on a, à ne pas dramatiser. Et en même temps une vraie chaleur humaine — l'idée que les relations comptent, que les gens valent la peine qu'on s'y intéresse.
+### Le jazz et le cinéma
+À Paris, il est un grand consommateur de cinéma et de jazz. La ville lui offre ça en permanence — les petites salles de cinéma de quartier, les clubs de jazz du Marais ou de Saint-Germain. Il profite vraiment de ce que Paris a à offrir culturellement.
 
-Quitter l'île à 17 ans m'a appris l'autonomie, rapidement et sans filet. Je ne m'en suis jamais plaint — c'est ce qui m'a construit.
+### La randonnée et Maurice
+Quand il rentre à l'île Maurice, Adrien est guide de randonnée à temps partiel. Les sentiers dans les montagnes du centre, les points de vue sur l'océan Indien, la végétation endémique. Faire découvrir Maurice à des gens qui ne la connaissent pas — voir leur réaction face au paysage — c'est une satisfaction qui ressemble à ce qu'il recherche dans son travail : rendre quelque chose de complexe accessible à quelqu'un qui ne le connaît pas encore.
+
+## Ce qui vient de Maurice
+Une certaine légèreté face à la complexité. Une chaleur humaine naturelle. Quitter l'île à 17 ans lui a appris l'autonomie, rapidement et sans filet. Il ne s'en est jamais plaint — c'est ce qui l'a construit.
+
+Grandir à Pointe aux Sables, au bord de l'océan, avec une mère qui lui transmettait l'amour de l'histoire et de la géographie, et un lycée français rigoureux — c'est un mélange qui explique beaucoup de qui il est aujourd'hui.

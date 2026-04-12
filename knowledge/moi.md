@@ -1,9 +1,13 @@
-# Qui je suis
+# Qui est Adrien
 
-Je m'appelle Adrien Casse, j'ai 25 ans. Je suis né et j'ai grandi à l'île Maurice — une île de l'océan Indien que j'aime profondément, mais que j'ai quitté à 17 ans avec un bac S en poche pour venir faire mes études en France. Ce n'était pas une décision facile à cet âge, mais c'était la mienne.
+Adrien Casse a 25 ans. Il est né et a grandi à Pointe aux Sables, un quartier côtier de l'île Maurice — une île de l'océan Indien qu'il aime profondément, et qu'il a quittée à 17 ans, bac S en poche, pour venir faire ses études en France.
 
-J'avais de la famille à Saint-Étienne, ce qui a rendu le départ un peu moins brutal. J'ai rejoint Lyon pour mes études supérieures, puis Paris pour ma vie professionnelle. Aujourd'hui Paris est vraiment ma ville — culturellement elle m'a pris. J'adore le cinéma, le jazz, la richesse de ce que cette ville offre. Quand j'ai du temps libre ici, j'en profite vraiment.
+Il a fait toute sa scolarité au Lycée La Bourdonnais, l'un des deux lycées français de l'AEFE à Maurice. Un établissement qui lui a donné une formation solide et rigoureuse, et une certaine façon d'aborder les choses avec méthode.
 
-Mais l'île Maurice reste dans tout ce que je fais. Quand j'y retourne, je suis guide de randonnée à temps partiel. Ce n'est pas juste une passion — c'est ma façon de faire découvrir la nature incroyable de Maurice aux autres, de partager quelque chose qui m'appartient profondément. Guider des gens dans des sentiers que je connais par cœur, voir leur réaction face au paysage — c'est une satisfaction qui ressemble un peu à ce que je recherche dans mon travail : rendre quelque chose de complexe accessible à quelqu'un qui ne le connaît pas encore.
+Adrien a toujours aimé les maths. Pas par obligation — par vraie curiosité pour la logique, les structures, les patterns qui se cachent derrière les données. Mais ce qui l'a construit intellectuellement, c'est aussi un intérêt fort pour l'histoire et la géographie, transmis par sa mère. Ce regard sur le monde, sur les territoires, les populations, les évolutions économiques — ça nourrit encore aujourd'hui sa façon d'interpréter les données plutôt que de simplement les traiter.
 
-Je parle français (langue maternelle), créole mauricien (natif), et anglais (niveau C1). Je me suis toujours senti à l'aise avec des gens très différents de moi — c'est ma normalité depuis l'enfance à Maurice, où la diversité n'est pas un concept, c'est la vie quotidienne.
+Son parcours a naturellement évolué vers les statistiques appliquées, mais toujours dans un objectif concret : construire des choses qui ont du sens, qui servent de bases analytiques solides pour d'autres. Pas la technique pour la technique.
+
+Il avait de la famille à Saint-Étienne, ce qui a rendu l'arrivée en France un peu moins brutale. Il a rejoint Lyon pour ses études, puis Paris pour sa vie professionnelle. Aujourd'hui Paris est vraiment sa ville — culturellement elle l'a pris.
+
+Adrien parle français (langue maternelle), créole mauricien (natif), et anglais (C1). La diversité n'a jamais été un concept abstrait pour lui — c'est sa normalité depuis l'enfance à Maurice.
