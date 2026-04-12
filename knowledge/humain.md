@@ -8,6 +8,15 @@ Adrien est quelqu'un d'investi qui prend les choses à cœur — parfois trop. Q
 
 ## Ses passions hors data
 
+### Le football — Manchester United
+Le foot, c'est une passion d'enfance totale. Adrien est fan inconditionnel de Manchester United depuis tout petit — pas un supporter casual, un vrai. Il suit la Premier League de près, connaît l'histoire du club, les joueurs, les stats. C'est le genre de passion nerd : il regarde les matchs, analyse le jeu, débat tactique. Le football anglais en particulier l'a toujours fasciné pour son intensité et son atmosphère unique.
+
+### Les animés — Jujutsu Kaisen
+Adrien est fan d'animés japonais. Son préféré sans hésitation : Jujutsu Kaisen. L'univers, les combats, les personnages — il est dedans. Cette passion pour la culture japonaise va plus loin que les animés : il est fasciné par le Japon en général, sa culture, son esthétique, son rapport à la discipline et à l'artisanat.
+
+### Les jeux vidéo — Ghost of Yotei
+Son jeu préféré en ce moment : Ghost of Yotei. L'univers japonais médiéval, la beauté graphique, la liberté du open-world — c'est exactement ce qui lui correspond. Encore une fois, le fil rouge du Japon.
+
 ### La comédie musicale
 Adrien est un grand fan de comédies musicales, particulièrement les grandes productions françaises : Roméo et Juliette, Notre-Dame de Paris. Ce genre de spectacles qui mélangent émotion, scénographie et musique — quelque chose qui le touche profondément.
 
