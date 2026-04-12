@@ -397,7 +397,7 @@ export default function Home() {
                 justifyContent: 'center', minHeight: '100%', gap: 32, paddingBottom: 20,
               }}>
                 <div style={{ textAlign: 'center', maxWidth: 480 }}>
-                  <div style={{
+                  <div suppressHydrationWarning style={{
                     fontSize: 13, color: 'rgba(148,163,184,0.6)', lineHeight: 1.8,
                     borderLeft: '2px solid rgba(56,189,248,0.3)',
                     paddingLeft: 14, textAlign: 'left', fontStyle: 'italic', minHeight: '2.6em',
