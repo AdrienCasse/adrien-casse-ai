@@ -15,7 +15,6 @@ import sqlite3
 import time
 from pathlib import Path
 
-import faiss
 import numpy as np
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
@@ -79,8 +78,8 @@ def _log_question(session_id: str, question: str, answer: str,
 print("Chargement du modèle d'embedding...")
 _model = SentenceTransformer("all-MiniLM-L6-v2")
 
-print("Chargement de l'index FAISS...")
-_index = faiss.read_index(str(DATA_DIR / "faiss.index"))
+print("Chargement des embeddings...")
+_embeddings = np.load(str(DATA_DIR / "embeddings.npy"))  # shape (N, 384)
 
 with open(DATA_DIR / "chunks.json", encoding="utf-8") as f:
     _chunks: list[dict] = json.load(f)
@@ -144,11 +143,12 @@ async def chat(body: ChatRequest, request: Request):
 
     # 1. Embed la question
     q_embedding = _model.encode([body.message], normalize_embeddings=True)
-    q_embedding = np.array(q_embedding, dtype="float32")
+    q_embedding = np.array(q_embedding, dtype="float32").flatten()
 
-    # 2. Recherche vectorielle FAISS
-    scores, indices = _index.search(q_embedding, TOP_K)
-    retrieved = [_chunks[i] for i in indices[0] if i < len(_chunks)]
+    # 2. Recherche par similarité cosine (embeddings normalisés → dot product = cosine)
+    scores = (_embeddings @ q_embedding)  # shape (N,)
+    top_indices = np.argsort(scores)[::-1][:TOP_K]
+    retrieved = [_chunks[i] for i in top_indices]
     context = "\n\n---\n\n".join(c["text"] for c in retrieved)
 
     # 3. Construire les messages
