@@ -106,23 +106,39 @@ export default function Home() {
           .layout { flex-direction: column !important; }
           .profile-panel {
             width: 100% !important;
+            flex-shrink: 0 !important;
             min-height: auto !important;
+            max-height: 90px !important;
+            overflow: hidden !important;
             border-right: none !important;
             border-bottom: 1px solid rgba(56,189,248,0.1) !important;
-            padding: 12px 16px !important;
+            padding: 10px 16px !important;
             flex-direction: row !important;
             align-items: center !important;
-            flex-wrap: wrap !important;
-            gap: 10px !important;
-            overflow: visible !important;
+            gap: 12px !important;
           }
           .profile-panel-hidden { display: none !important; }
           .profile-desktop-only { display: none !important; }
-          .chat-panel { height: 100dvh !important; }
+          .profile-bio-facts { display: none !important; }
+          .profile-avatar-section {
+            flex-direction: row !important;
+            align-items: center !important;
+            gap: 12px !important;
+            margin-bottom: 0 !important;
+          }
+          .profile-avatar-section > div:first-child {
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 14px !important;
+            border-radius: 10px !important;
+            margin-bottom: 0 !important;
+            flex-shrink: 0 !important;
+          }
+          .chat-panel { flex: 1 !important; height: auto !important; min-height: 0 !important; }
           .suggestions-grid { grid-template-columns: 1fr !important; }
           .mobile-profile-toggle { display: flex !important; }
           .messages-area { padding: 16px 16px 8px !important; }
-          .input-area { padding: 8px 12px max(12px, env(safe-area-inset-bottom)) !important; }
+          .input-area { padding: 8px 12px max(14px, env(safe-area-inset-bottom)) !important; }
         }
         @media (min-width: 769px) {
           .mobile-profile-toggle { display: none !important; }
@@ -161,13 +177,13 @@ export default function Home() {
           backdropFilter: 'blur(20px)',
         }}>
           {/* Top accent */}
-          <div style={{
+          <div className="profile-desktop-only" style={{
             height: 2, marginBottom: 28, marginLeft: -22, marginRight: -22,
             background: 'linear-gradient(90deg, #38bdf8 0%, #0ea5e9 50%, transparent 100%)',
           }} />
 
           {/* Avatar */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
+          <div className="profile-avatar-section" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 24 }}>
             <div style={{
               width: 72, height: 72, borderRadius: 20,
               background: 'linear-gradient(135deg, #0f4c8a, #38bdf8)',
@@ -190,7 +206,7 @@ export default function Home() {
           </div>
 
           {/* Bio facts */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
+          <div className="profile-bio-facts" style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
             {[
               { Icon: MapPin, text: 'Paris · Île Maurice', color: '#f59e0b' },
               { Icon: Briefcase, text: 'C-Ways · CDI', color: '#38bdf8' },
