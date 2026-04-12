@@ -11,28 +11,57 @@ Lancement local :
 import hashlib
 import json
 import os
+import re
 import sqlite3
 import time
+from collections import defaultdict
 from pathlib import Path
 
 import numpy as np
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from groq import Groq
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from fastembed import TextEmbedding
 
 load_dotenv()
 
 app = FastAPI(title="Adrien Casse AI")
 
+ALLOWED_ORIGINS = [
+    "https://adrien-casse-rag.vercel.app",
+    "https://frontend-one-zeta-82.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:3001",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=ALLOWED_ORIGINS,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
 )
+
+# ─── Rate limiting (in-memory, par IP) ────────────────────────────────────────
+# Max 20 requêtes / IP / heure
+
+_rate_store: dict[str, list[float]] = defaultdict(list)
+RATE_LIMIT = 20
+RATE_WINDOW = 3600  # secondes
+
+
+def _check_rate_limit(ip: str) -> bool:
+    """Retourne True si la requête est autorisée, False sinon."""
+    now = time.time()
+    window_start = now - RATE_WINDOW
+    timestamps = [t for t in _rate_store[ip] if t > window_start]
+    _rate_store[ip] = timestamps
+    if len(timestamps) >= RATE_LIMIT:
+        return False
+    _rate_store[ip].append(now)
+    return True
 
 DATA_DIR = Path(__file__).parent / "data"
 DATA_DIR.mkdir(exist_ok=True)
@@ -119,9 +148,44 @@ TOP_K = 4
 
 # ─── Routes ───────────────────────────────────────────────────────────────────
 
+MAX_MESSAGE_LEN = 500
+MAX_HISTORY_TURNS = 6
+_INJECTION_PATTERNS = re.compile(
+    r"(ignore (all |previous |prior |above )?(instructions?|prompts?|rules?)|"
+    r"new (instructions?|system prompt)|"
+    r"tu es maintenant|forget (everything|all)|"
+    r"disregard|act as|jailbreak|DAN prompt)",
+    re.IGNORECASE,
+)
+
+
 class ChatRequest(BaseModel):
     message: str
     history: list[dict] = []
+
+    @field_validator("message")
+    @classmethod
+    def validate_message(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError("Le message ne peut pas être vide")
+        if len(v) > MAX_MESSAGE_LEN:
+            raise ValueError(f"Message trop long (max {MAX_MESSAGE_LEN} caractères)")
+        if _INJECTION_PATTERNS.search(v):
+            raise ValueError("Message refusé")
+        return v
+
+    @field_validator("history")
+    @classmethod
+    def validate_history(cls, v: list[dict]) -> list[dict]:
+        # Ne garder que les champs attendus, tronquer l'historique
+        clean = []
+        for turn in v[-MAX_HISTORY_TURNS:]:
+            role = turn.get("role", "")
+            content = str(turn.get("content", ""))[:1000]
+            if role in ("user", "assistant") and content:
+                clean.append({"role": role, "content": content})
+        return clean
 
 
 @app.get("/health")
@@ -139,7 +203,15 @@ async def chat(body: ChatRequest, request: Request):
 
     # Session ID anonymisé (hash de l'IP)
     client_ip = request.headers.get("x-forwarded-for", request.client.host if request.client else "unknown")
+    client_ip = client_ip.split(",")[0].strip()  # x-forwarded-for peut contenir plusieurs IPs
     session_id = hashlib.sha256(client_ip.encode()).hexdigest()[:16]
+
+    # Rate limiting
+    if not _check_rate_limit(client_ip):
+        return JSONResponse(
+            status_code=429,
+            content={"detail": "Trop de requêtes. Réessaie dans une heure."},
+        )
 
     # 1. Embed la question
     q_embedding = np.array(list(_model.embed([body.message])), dtype="float32").flatten()
@@ -170,7 +242,6 @@ async def chat(body: ChatRequest, request: Request):
     latency_ms = int((time.time() - t_start) * 1000)
 
     # Strip markdown résiduel
-    import re
     reply = re.sub(r"\*{1,2}([^*]+)\*{1,2}", r"\1", reply)
     reply = re.sub(r"_{1,2}([^_]+)_{1,2}", r"\1", reply)
     reply = re.sub(r"^#{1,6}\s+", "", reply, flags=re.MULTILINE)
