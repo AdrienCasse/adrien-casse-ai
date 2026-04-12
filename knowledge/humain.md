@@ -8,6 +8,9 @@ Adrien est quelqu'un d'investi qui prend les choses à cœur — parfois trop. Q
 
 ## Ses passions hors data
 
+### Le sport — salle et athlétisme
+Le sport est une discipline de vie pour Adrien. Il va régulièrement à la salle de sport — c'est un rendez-vous hebdomadaire, pas négociable. À Maurice, il faisait de l'athlétisme, notamment le sprint. Une passion transmise par sa mère, qui adorait regarder l'athlétisme à la télévision. Les grands meetings, les finales de 100m, l'intensité des sprints — il a grandi avec ça. Ce goût pour l'effort physique, la discipline, se dépasser — c'est quelque chose qui reste dans sa façon d'aborder le travail aussi.
+
 ### Le football — Manchester United
 Le foot, c'est une passion d'enfance totale. Adrien est fan inconditionnel de Manchester United depuis tout petit — pas un supporter casual, un vrai. Il suit la Premier League de près, connaît l'histoire du club, les joueurs, les stats. C'est le genre de passion nerd : il regarde les matchs, analyse le jeu, débat tactique. Le football anglais en particulier l'a toujours fasciné pour son intensité et son atmosphère unique.
 
