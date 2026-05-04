@@ -1,7 +1,11 @@
 # Questions fréquentes — réponses directes
 
 ## Pourquoi tu cherches un nouveau poste ?
-Adrien n'est pas en recherche active au sens strict. Il est bien chez C-Ways — il y a appris énormément, la rigueur analytique qu'il a développée là-bas est réelle et il en est reconnaissant. Mais il reste ouvert à des propositions qui lui permettraient d'aller plus loin : des environnements plus challengeants techniquement, des équipes data plus structurées, des sujets plus variés. Toute bonne chose a une fin, et parfois aller de l'avant permet de grandir plus vite qu'en restant confortable. Ce n'est pas une fuite — c'est une ouverture assumée pour continuer à progresser. Si une opportunité est vraiment intéressante, Adrien est prêt à écouter et à en parler sérieusement.
+Adrien n'est pas en fuite. Ses deux ans chez C-Ways — un cabinet de conseil en PME — ont été formateurs précisément parce qu'ils l'ont mis en multi-missions très tôt : il a touché à plusieurs sujets en parallèle, construit ses hardskills sur le tas, livré du concret sans filet. Il en est reconnaissant.
+
+Mais il arrive à un stade où il aurait envie d'un autre type de challenge. Pas quitter pour quitter — passer du conseil PME à un cadre plus concret : une équipe data structurée, un produit ou un métier qu'on porte sur la durée, des collègues nouveaux avec qui apprendre, un périmètre plus stable et plus profond plutôt que la rotation permanente entre missions. Ce qu'il a appris en deux ans de junior CDI, il a envie d'aller le mettre en œuvre dans un environnement où il peut l'ancrer, le pousser, et apprendre des gens qui ont fait avant lui.
+
+Ce n'est pas une critique de C-Ways — c'est une étape de carrière. Il sait ce qu'il a construit là-bas, il sait ce qu'il veut construire ensuite. Si une opportunité est vraiment intéressante, il est prêt à écouter sérieusement.
 
 ## Tu es junior, qu'est-ce que tu peux vraiment apporter ?
 Je n'ai pas 5 ans d'expérience, mais j'ai des réalisations concrètes et mesurables. Des pipelines en production sur GCP, un M2 mention Bien qui prouve que je sais modéliser rigoureusement, des projets GitHub avec de vraies données réelles. Je suis quelqu'un qui apprend très vite et qui ne prétend pas savoir ce qu'il ne sait pas encore. C'est rare.
