@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Send, Loader2, Github, Linkedin, RotateCcw, MapPin, Briefcase, ShieldCheck } from 'lucide-react'
+import { Send, Loader2, Github, Linkedin, RotateCcw, MapPin, Briefcase } from 'lucide-react'
 
 const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8002'
 
@@ -52,10 +52,6 @@ function Sidebar() {
         <div className="sb-row">
           <div className="sb-row-icon"><Briefcase size={14} /></div>
           <div className="sb-row-label">2 ans · CDI Data Science</div>
-        </div>
-        <div className="sb-row">
-          <div className="sb-row-icon"><ShieldCheck size={14} /></div>
-          <div className="sb-row-label">Passeport Talent · 2026–2030</div>
         </div>
       </div>
 
@@ -130,7 +126,7 @@ export default function Home() {
               <a href="https://github.com/AdrienCasse" target="_blank" rel="noreferrer" className="btn-link" aria-label="GitHub">
                 <Github size={13} /> GitHub
               </a>
-              <a href="https://www.linkedin.com/in/adrien-casse" target="_blank" rel="noreferrer" className="btn-link" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/in/adriencasse/" target="_blank" rel="noreferrer" className="btn-link" aria-label="LinkedIn">
                 <Linkedin size={13} /> LinkedIn
               </a>
               {!empty && (
