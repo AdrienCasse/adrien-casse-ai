@@ -18,17 +18,17 @@ Utilisateur
 Vercel — Next.js 14 (frontend/)
     ↓ POST /chat
 Vercel — FastAPI Python (backend/) [Vercel Function, région cdg1]
-    ├─ HuggingFace Inference API: embed la question (BAAI/bge-small-en-v1.5, 384 dims)
+    ├─ fastembed ONNX: embed la question (BAAI/bge-small-en-v1.5, 384 dims)
     ├─ NumPy cosine similarity sur ~79 chunks (embeddings.npy + chunks.json)
     ├─ Top-4 chunks → injectés dans le system prompt
     └─ Groq API (Llama 3.3 70B) → réponse en 3ème personne
 ```
 
-**Pourquoi HF Inference API plutôt que fastembed (ONNX local) :**
-Railway utilisait Docker → taille d'image illimitée. Sur Vercel Functions (250 MB max),
-onnxruntime (69 MB) + modèle ONNX (33 MB) + autres deps dépassait la limite.
-La solution : conserver le même modèle via l'API HF (gratuite, compatible avec les
-embeddings pré-calculés). fastembed reste utilisé dans embed.py pour le build local.
+**Pourquoi fastembed reste viable sur Vercel (250 MB max) :**
+Railway utilisait Docker → taille d'image illimitée. Sur Vercel, onnxruntime (69 MB)
++ modèle ONNX quantisé (63 MB) + autres deps ≈ 180 MB — sous la limite.
+Le modèle n'est PAS dans git (trop lourd) : download_model.py le télécharge au
+build Vercel (buildCommand) et les fichiers sont inclus dans le bundle de fonction.
 
 **Fichiers critiques :**
 
@@ -160,8 +160,7 @@ Ne pas assouplir le CORS. Ne pas augmenter le rate limit sans raison documentée
 
 | Décision | Raison |
 |----------|--------|
-| HF Inference API (pas fastembed/ONNX local) | onnxruntime (69MB) + modèle (33MB) dépassait la limite 250MB des Vercel Functions |
-| fastembed reste dans embed.py (build local) | Pas de contrainte de taille en local — on garde la même qualité pour les pré-calculs |
+| fastembed ONNX (download au build Vercel) | Modèle (63MB) + onnxruntime (69MB) + deps ≈ 180MB — sous la limite 250MB. Pas dans git : download_model.py le télécharge au buildCommand |
 | NumPy cosine (pas FAISS) | ~79 chunks — FAISS = overhead inutile |
 | Groq (pas OpenAI) | Tier gratuit, 14 400 req/jour, latence ~300ms |
 | SQLite /tmp (pas PostgreSQL) | Analytics non-critiques ; /tmp est inscriptible sur Vercel Functions |
