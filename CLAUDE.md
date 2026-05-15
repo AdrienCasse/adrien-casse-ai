@@ -17,12 +17,18 @@ Utilisateur
     ↓ HTTPS
 Vercel — Next.js 14 (frontend/)
     ↓ POST /chat
-Railway — FastAPI Python 3.11 (backend/)
-    ├─ fastembed: embed la question (BAAI/bge-small-en-v1.5, 384 dims, ONNX)
-    ├─ NumPy cosine similarity sur 57 chunks (embeddings.npy + chunks.json)
+Vercel — FastAPI Python (backend/) [Vercel Function, région cdg1]
+    ├─ HuggingFace Inference API: embed la question (BAAI/bge-small-en-v1.5, 384 dims)
+    ├─ NumPy cosine similarity sur ~79 chunks (embeddings.npy + chunks.json)
     ├─ Top-4 chunks → injectés dans le system prompt
     └─ Groq API (Llama 3.3 70B) → réponse en 3ème personne
 ```
+
+**Pourquoi HF Inference API plutôt que fastembed (ONNX local) :**
+Railway utilisait Docker → taille d'image illimitée. Sur Vercel Functions (250 MB max),
+onnxruntime (69 MB) + modèle ONNX (33 MB) + autres deps dépassait la limite.
+La solution : conserver le même modèle via l'API HF (gratuite, compatible avec les
+embeddings pré-calculés). fastembed reste utilisé dans embed.py pour le build local.
 
 **Fichiers critiques :**
 
@@ -62,10 +68,10 @@ Railway — FastAPI Python 3.11 (backend/)
 
 ```bash
 cd backend && python3 embed.py
-# Vérifie: "Embeddings calculés: X chunks"
+# Vérifie: "Done — X chunks indexés"
 git add backend/data/ knowledge/
 git commit -m "feat(knowledge) : <sujet>"
-git push  # Railway redéploie automatiquement
+git push  # Vercel redéploie automatiquement
 ```
 
 ---
@@ -90,7 +96,7 @@ Définies dans le system prompt de `backend/main.py` (ligne ~80) :
 cd backend
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env  # renseigner GROQ_API_KEY
+cp .env.example .env  # renseigner GROQ_API_KEY + HF_API_TOKEN
 python3 embed.py      # obligatoire au premier setup
 uvicorn main:app --reload --port 8002
 ```
@@ -112,24 +118,30 @@ npm run dev  # port 3002
 
 ## Déploiement
 
-### Backend → Railway
+### Backend → Vercel (projet séparé, depuis `backend/`)
 
-Railway auto-déploie sur `git push` (branch `main`).  
-Le Dockerfile exécute `python3 embed.py` au build — les embeddings sont figés dans l'image.
+```bash
+cd backend
+vercel              # premier déploiement : crée le projet
+vercel --prod       # déploiements suivants en production
+```
+
+**Variables d'environnement requises sur Vercel (backend) :**
+- `GROQ_API_KEY=gsk_...`
+- `HF_API_TOKEN=hf_...` (huggingface.co → Settings → Access Tokens)
 
 **Forcer un redéploiement sans changement de code :**
 ```bash
-git commit --allow-empty -m "chore : force redeploy Railway"
+git commit --allow-empty -m "chore : force redeploy Vercel"
 git push
 ```
 
-**Variable d'environnement requise sur Railway :** `GROQ_API_KEY`
+### Frontend → Vercel (projet existant, depuis `frontend/`)
 
-### Frontend → Vercel
+Vercel auto-déploie sur `git push`.
 
-Vercel auto-déploie sur `git push` depuis le dossier `frontend/`.
-
-**Variable d'environnement requise sur Vercel :** `NEXT_PUBLIC_API_URL=https://<railway-url>`
+**Variable d'environnement à mettre à jour sur le projet frontend :**
+`NEXT_PUBLIC_API_URL=https://<nouveau-backend-url>.vercel.app`
 
 ---
 
@@ -148,13 +160,15 @@ Ne pas assouplir le CORS. Ne pas augmenter le rate limit sans raison documentée
 
 | Décision | Raison |
 |----------|--------|
-| fastembed (pas sentence-transformers) | Image Docker 10x plus légère (~150MB vs ~1.5GB) |
-| NumPy cosine (pas FAISS) | 57 chunks — FAISS = overhead inutile |
+| HF Inference API (pas fastembed/ONNX local) | onnxruntime (69MB) + modèle (33MB) dépassait la limite 250MB des Vercel Functions |
+| fastembed reste dans embed.py (build local) | Pas de contrainte de taille en local — on garde la même qualité pour les pré-calculs |
+| NumPy cosine (pas FAISS) | ~79 chunks — FAISS = overhead inutile |
 | Groq (pas OpenAI) | Tier gratuit, 14 400 req/jour, latence ~300ms |
-| SQLite (pas PostgreSQL) | Analytics uniquement, pas de concurrence critique |
+| SQLite /tmp (pas PostgreSQL) | Analytics non-critiques ; /tmp est inscriptible sur Vercel Functions |
 | CSR Next.js (pas SSR) | Aucune donnée sensible, pas de SEO nécessaire |
 | Knowledge en .md (pas base SQL) | Éditable manuellement, versionné en git |
 | Embed à build time (pas runtime) | Startup immédiat, pas de latence au premier appel |
+| Deux projets Vercel séparés (pas monorepo) | Frontend déjà déployé — découpler évite de tout reconfigurer |
 
 ---
 

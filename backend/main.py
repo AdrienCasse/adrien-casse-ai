@@ -2,7 +2,8 @@
 main.py — FastAPI RAG chatbot pour Adrien Casse.
 
 Variables d'environnement requises :
-  GROQ_API_KEY=gsk_...   (gratuit sur console.groq.com)
+  GROQ_API_KEY=gsk_...    (gratuit sur console.groq.com)
+  HF_API_TOKEN=hf_...     (gratuit sur huggingface.co — embedding de la requête)
 
 Lancement local :
   uvicorn main:app --reload --port 8002
@@ -17,6 +18,7 @@ import time
 from collections import defaultdict
 from pathlib import Path
 
+import httpx
 import numpy as np
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request
@@ -24,7 +26,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from groq import Groq
 from pydantic import BaseModel, field_validator
-from fastembed import TextEmbedding
 
 load_dotenv()
 
@@ -35,6 +36,7 @@ ALLOWED_ORIGINS = [
     "https://frontend-one-zeta-82.vercel.app",
     "http://localhost:3000",
     "http://localhost:3001",
+    "http://localhost:3002",
 ]
 
 app.add_middleware(
@@ -65,7 +67,9 @@ def _check_rate_limit(ip: str) -> bool:
 
 DATA_DIR = Path(__file__).parent / "data"
 DATA_DIR.mkdir(exist_ok=True)
-DB_PATH = DATA_DIR / "analytics.db"
+
+# /tmp est le seul répertoire inscriptible sur Vercel (fonction stateless)
+DB_PATH = (Path("/tmp") if os.getenv("VERCEL") else DATA_DIR) / "analytics.db"
 
 
 # ─── Analytics DB ─────────────────────────────────────────────────────────────
@@ -102,12 +106,39 @@ def _log_question(session_id: str, question: str, answer: str,
     con.close()
 
 
+# ─── Embedding via HuggingFace Inference API ──────────────────────────────────
+# Même modèle (BAAI/bge-small-en-v1.5) que celui utilisé pour pré-calculer
+# embeddings.npy — les vecteurs sont donc compatibles.
+# Remplace fastembed/ONNX qui dépassait la limite de 250 MB des Vercel Functions.
+
+_HF_EMBED_URL = "https://api-inference.huggingface.co/pipeline/feature-extraction/BAAI/bge-small-en-v1.5"
+
+
+async def _embed_query(text: str) -> np.ndarray:
+    hf_token = os.getenv("HF_API_TOKEN", "")
+    headers = {"Authorization": f"Bearer {hf_token}"} if hf_token else {}
+    payload = {"inputs": text, "options": {"wait_for_model": True}}
+
+    async with httpx.AsyncClient(timeout=30.0) as client:
+        resp = await client.post(_HF_EMBED_URL, headers=headers, json=payload)
+        resp.raise_for_status()
+
+    data = resp.json()
+    # HF retourne [[token_embs…]] ou [sentence_emb] selon le modèle.
+    # BGE : pooling déjà appliqué → data[0] est le vecteur 384-dim.
+    raw = data[0]
+    if isinstance(raw[0], list):
+        emb = np.array(raw, dtype="float32").mean(axis=0)  # mean pooling fallback
+    else:
+        emb = np.array(raw, dtype="float32")
+
+    norm = np.linalg.norm(emb)
+    return emb / max(norm, 1e-10)
+
+
 # ─── Chargement des ressources (une seule fois au démarrage) ──────────────────
 
-print("Chargement du modèle fastembed...")
-_model = TextEmbedding("BAAI/bge-small-en-v1.5")
-
-print("Chargement des embeddings...")
+print("Chargement des embeddings pré-calculés...")
 _embeddings = np.load(str(DATA_DIR / "embeddings.npy"))  # shape (N, 384)
 
 with open(DATA_DIR / "chunks.json", encoding="utf-8") as f:
@@ -138,7 +169,7 @@ Il est ouvert à de nouvelles opportunités — pas en fuite de C-Ways, mais con
 Né à Maurice, arrivé en France à 17 ans pour ses études. Formation universitaire à Lyon, choix assumé. Ce que ça lui a donné en pratique : autonomie, organisation, rigueur dans la livraison. Il travaille sans filet depuis longtemps — ça se voit dans la façon dont il structure son travail.
 
 ── COMMENT TU FONCTIONNES (META) ──
-Si on te demande comment tu marches, qui t'a fait, quel LLM tu utilises, où tu es hébergé, si tu es self-hosted, etc. — réponds avec précision sur la base du contexte (fichier architecture). Tu peux parler de toi à la première personne dans ce cas (« je suis un chatbot RAG construit par Adrien… »), c'est plus naturel. Sois technique et concret : LLM (Groq, Llama 3.3 70B), embeddings (fastembed BAAI/bge-small-en-v1.5), retrieval (NumPy cosine sur ~79 chunks), backend (FastAPI/Railway), frontend (Next.js/Vercel), pas de framework type LangChain. Pas de bullshit marketing.
+Si on te demande comment tu marches, qui t'a fait, quel LLM tu utilises, où tu es hébergé, si tu es self-hosted, etc. — réponds avec précision sur la base du contexte (fichier architecture). Tu peux parler de toi à la première personne dans ce cas (« je suis un chatbot RAG construit par Adrien… »), c'est plus naturel. Sois technique et concret : LLM (Groq, Llama 3.3 70B), embeddings (BAAI/bge-small-en-v1.5 via HuggingFace Inference API), retrieval (NumPy cosine sur ~79 chunks pré-calculés), backend (FastAPI/Vercel Python), frontend (Next.js/Vercel), pas de framework type LangChain. Pas de bullshit marketing.
 
 CONTEXTE RÉCUPÉRÉ (source principale — prioritaire sur le reste) :
 {context}
@@ -229,9 +260,8 @@ async def chat(body: ChatRequest, request: Request):
             content={"detail": "Trop de requêtes. Réessaie dans une heure."},
         )
 
-    # 1. Embed la question
-    q_embedding = np.array(list(_model.embed([body.message])), dtype="float32").flatten()
-    q_embedding = q_embedding / max(np.linalg.norm(q_embedding), 1e-10)
+    # 1. Embed la question via HuggingFace Inference API
+    q_embedding = await _embed_query(body.message)
 
     # 2. Recherche par similarité cosine (embeddings normalisés → dot product = cosine)
     scores = (_embeddings @ q_embedding)  # shape (N,)
